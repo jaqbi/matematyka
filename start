@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Zabawa matematyczna: Alfabet</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(5, 80px); grid-gap: 10px; margin: 30px auto; width: max-content; }
+  .cell { border: 2px solid #333; padding: 10px; text-align: center; font-size: 18px; background: #f9f9f9; }
+  .input { width: 40px; font-size: 16px; text-align: center; }
+  .letter { font-weight: bold; color: green; font-size: 20px; }
+  #result { margin-top: 30px; font-size: 22px; color: blue; }
+</style>
+</head>
+<body>
+<h2>Zabawa matematyczna: Alfabet</h2>
+<p>Rozwiąż działania. Po poprawnej odpowiedzi pojawi się literka. Po rozwiązaniu wszystkich poznasz hasło!</p>
+<div class="grid" id="quiz"></div>
+<div id="result"></div>
+<script>
+const actions = [
+  {a: 10, b: 3, op: '-', res: 7, letter: 'a'},
+  {a: 2, b: 2, op: '+', res: 4, letter: 'b'},
+  {a: 15, b: 5, op: '-', res: 10, letter: 'c'},
+  {a: 7, b: 6, op: '+', res: 13, letter: 'd'},
+  {a: 18, b: 2, op: '-', res: 16, letter: 'e'},
+  {a: 9, b: 8, op: '+', res: 17, letter: 'f'},
+  {a: 12, b: 1, op: '-', res: 11, letter: 'g'},
+  {a: 5, b: 7, op: '+', res: 12, letter: 'h'},
+  {a: 19, b: 1, op: '-', res: 18, letter: 'i'},
+  {a: 8, b: 9, op: '+', res: 17, letter: 'j'},
+  {a: 14, b: 3, op: '-', res: 11, letter: 'k'},
+  {a: 6, b: 8, op: '+', res: 14, letter: 'l'},
+  {a: 17, b: 2, op: '-', res: 15, letter: 'm'},
+  {a: 3, b: 5, op: '+', res: 8, letter: 'n'},
+  {a: 20, b: 1, op: '-', res: 19, letter: 'o'},
+  {a: 4, b: 7, op: '+', res: 11, letter: 'p'},
+  {a: 13, b: 2, op: '-', res: 11, letter: 'q'},
+  {a: 7, b: 8, op: '+', res: 15, letter: 'r'},
+  {a: 16, b: 5, op: '-', res: 11, letter: 's'},
+  {a: 1, b: 8, op: '+', res: 9, letter: 't'}
+];
+let solved = Array(actions.length).fill(false);
+function render() {
+  let html = '';
+  for (let i = 0; i < actions.length; i++) {
+    html += `<div class='cell' id='cell${i}'>`;
+    html += `${actions[i].a} ${actions[i].op} ${actions[i].b} = <input class='input' id='input${i}' maxlength='2' size='2' oninput='check(${i})'>`;
+    html += `<div class='letter' id='letter${i}'></div>`;
+    html += `</div>`;
+  }
+  document.getElementById('quiz').innerHTML = html;
+}
+function check(i) {
+  const val = document.getElementById('input'+i).value;
+  if (parseInt(val) === actions[i].res && !solved[i]) {
+    document.getElementById('letter'+i).innerText = actions[i].letter;
+    solved[i] = true;
+    document.getElementById('input'+i).disabled = true;
+    checkAll();
+  }
+}
+function checkAll() {
+  if (solved.every(x => x)) {
+    document.getElementById('result').innerHTML = '<b>Brawo! Hasło to: <span style="color:green">alfabet</span> (abecadło)</b>';
+  }
+}
+render();
+</script>
+</body>
+</html>
