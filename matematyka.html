@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Zabawa matematyczna: Alfabet, czyli abecadło</title>
+<style>
+  body { font-family: Arial, sans-serif; }
+  .row { display: flex; justify-content: center; margin-bottom: 30px; }
+  .cell {
+    border: 2px solid #333;
+    background: #f9f9f9;
+    margin: 0 5px;
+    font-size: 30px;
+    text-align: center;
+    box-sizing: border-box;
+    width: 220px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .input { width: 80px; font-size: 30px; text-align: center; }
+  .letter { font-weight: bold; color: green; font-size: 30px; margin-top: 10px; }
+  #result { margin-top: 30px; font-size: 30px; color: blue; }
+</style>
+</head>
+<body>
+<h2 style="font-size:30px;">Zabawa matematyczna: Alfabet, czyli abecadło</h2>
+<p style="font-size:30px;">Rozwiąż działania. Po poprawnej odpowiedzi pojawi się literka. Po rozwiązaniu wszystkich poznasz hasło!</p>
+<div id="quiz"></div>
+<div id="result"></div>
+<script>
+const rows = [
+  // "alfabet" – 7 liter
+  [
+    {a: 5, b: 2, op: '+', res: 7, letter: 'a'},
+    {a: 8, b: 3, op: '-', res: 5, letter: 'l'},
+    {a: 3, b: 3, op: '+', res: 6, letter: 'f'},
+    {a: 9, b: 5, op: '-', res: 4, letter: 'a'},
+    {a: 4, b: 2, op: '+', res: 6, letter: 'b'},
+    {a: 10, b: 2, op: '-', res: 8, letter: 'e'},
+    {a: 6, b: 4, op: '+', res: 10, letter: 't'}
+  ],
+  // "czyli" – 5 liter
+  [
+    {a: 12, b: 2, op: '+', res: 14, letter: 'c'},
+    {a: 10, b: 7, op: '+', res: 17, letter: 'z'},
+    {a: 16, b: 1, op: '-', res: 15, letter: 'y'},
+    {a: 9, b: 2, op: '+', res: 11, letter: 'l'},
+    {a: 14, b: 2, op: '-', res: 12, letter: 'i'}
+  ],
+  // "abecadło" – 8 liter
+  [
+    {a: 10, b: 10, op: '+', res: 20, letter: 'a'},
+    {a: 6, b: 4, op: '-', res: 2, letter: 'b'},
+    {a: 13, b: 2, op: '+', res: 15, letter: 'e'},
+    {a: 17, b: 3, op: '-', res: 14, letter: 'c'},
+    {a: 8, b: 4, op: '+', res: 12, letter: 'a'},
+    {a: 20, b: 10, op: '-', res: 10, letter: 'd'},
+    {a: 14, b: 4, op: '+', res: 18, letter: 'ł'},
+    {a: 5, b: 3, op: '+', res: 8, letter: 'o'}
+  ]
+];
+let solved = rows.map(row => Array(row.length).fill(false));
+function render() {
+  let html = '';
+  for (let r = 0; r < rows.length; r++) {
+    html += `<div class='row'>`;
+    for (let i = 0; i < rows[r].length; i++) {
+      html += `<div class='cell' id='cell${r}_${i}'>`;
+      html += `${rows[r][i].a} ${rows[r][i].op} ${rows[r][i].b} = <input class='input' id='input${r}_${i}' maxlength='2' size='2' oninput='check(${r},${i})'>`;
+      html += `<div class='letter' id='letter${r}_${i}'></div>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+  document.getElementById('quiz').innerHTML = html;
+}
+function check(r, i) {
+  const val = document.getElementById('input'+r+'_'+i).value;
+  if (parseInt(val) === rows[r][i].res && !solved[r][i]) {
+    document.getElementById('letter'+r+'_'+i).innerText = rows[r][i].letter;
+    solved[r][i] = true;
+    document.getElementById('input'+r+'_'+i).disabled = true;
+    checkAll();
+  }
+}
+function checkAll() {
+  if (solved.flat().every(x => x)) {
+    document.getElementById('result').innerHTML = '<b>Brawo! Hasło to: <span style="color:green">alfabet, czyli abecadło</span></b>';
+  }
+}
+render();
+</script>
+</body>
+</html>
